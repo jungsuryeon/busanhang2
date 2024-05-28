@@ -789,7 +789,7 @@ int main(void) {
 					citizen_num[max_number] = -1;
 					printf("citizen%d had been attacked by zombie\n %d citizen(s) alive(s)", max_number, max_number);
 					max_number = max_number - 1;
-					if (max_number == -1) {
+					if (citizen_num[max_number] == 0) {
 						printf("\n GAME OVER citizens dead... \n");
 						dead = 1; break;
 					}
@@ -808,7 +808,7 @@ int main(void) {
 				citizen_num[max_number] = -1;
 				printf("citizen%d had been attacked by zombie\n %d citizen(s) alive(s)", max_number, max_number);
 				max_number = max_number - 1;
-				if (max_number == -1) {
+				if (citizen_num[max_number] == 0) {
 					printf("\n GAME OVER citizens dead... \n");
 					dead = 1; break;
 				}
