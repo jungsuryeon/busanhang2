@@ -27,7 +27,7 @@
 #define ACTION_PROVOKE 1
 #define ACTION_PULL 2
 
-int citizen_num[100], citizen_num1[100], citizen_num_aggro[100], citizen_num_aggro1[100];
+int citizen_num[100], citizen_num1[100], citizen_num_aggro[100], citizen_num_aggro1[100], zombie_num[100], zombie_num1[100];
 
 // 함수선언
 //기본 입력
@@ -68,18 +68,25 @@ int over4(int);// 3-2 빌런 어그로
 
 //3-3 추가
 int zombie_percent3(int, int, int, int, int, int);//3-3 좀비 이동
-void line3(int, int, int, int);//3-3 열차 출력
-int citize_place(int);//3-3 시민 숫자 및 배치
-void citize_array(int);//3-3 시민 정렬
-void citizen_percent3(int, int);//3-3 시민들 확률로 움직이기
-void citizen_percent_chang(int);//3-3 전 값 시민 저장
-void citizen_num_aggro_chang(int);//3-3 전 값 시민 어그로 저장
-void citizen_percent_aggro3(int);//3-3 시민들 어그로
-void citizens_write(int);//3-3 시민 상태창
-void over5(int);// 3-3 시민들 어그로
 
+//3-3,3-4 추가
+void line3(int, int, int, int);//3-3,3-4 열차 출력
+int citize_place(int);//3-3,3-4 시민 숫자 및 배치
+void citize_array(int);//3-3,3-4 시민 정렬
+void citizen_percent3(int, int);//3-3,3-4 시민들 확률로 움직이기
+void citizen_percent_chang(int);//3-3,3-4 전 값 시민 저장
+void citizen_num_aggro_chang(int);//3-3,3-4 전 값 시민 어그로 저장
+void citizen_percent_aggro3(int);//3-3,3-4 시민들 어그로
+void citizens_write(int);//3-3 3-4 시민 상태창
+void over5(int);// 3-3 3-4 시민들 어그로
 
-void line(int len, int citizen, int zombie, int Ma, int villain) {
+//3-4 추가
+int zombie_percent4(int, int, int, int, int, int, int, int);//3-4 좀비 이동
+void zombie_percent_chang(int);//3-4 좀비저장
+void zombies_write(int);//3-4 좀비 상태창
+void zero_number(void);//3-4 시민들 초기화
+
+void line(int len, int citizen, int zombie, int Ma, int villain) { // 2, 3-2 열차 출력
 	int turn = 0;
 	while (turn <= 2) {
 		turn++;
@@ -108,7 +115,7 @@ void line(int len, int citizen, int zombie, int Ma, int villain) {
 	}
 }
 
-void line3(int len, int zombie, int Ma, int citizen_number) {
+void line3(int len, int zombie, int Ma, int citizen_number) { //3-3, 3-4 열차 출력
 	int turn = 0;
 	while (turn <= 2) {
 		turn++;
@@ -126,6 +133,9 @@ void line3(int len, int zombie, int Ma, int citizen_number) {
 					{
 						if (i == citizen_num[j]) {
 							printf("C"); z = 1; break;
+						}
+						else if (i == zombie_num[j]) {
+							printf("Z"); z = 1; break;
 						}
 					}
 					if (z != 1)
@@ -320,7 +330,7 @@ int zombie_percent2(int turn, int percent, int success, int zombie, int Ma, int 
 }
 
 //3-3, 3-4 시민들
-int citize_place(int len) { // 3-3 시민 숫자, 배치
+int citize_place(int len) { // 3-3, 3-4 시민 숫자, 배치
 	int citizen_number = rand() % ((len / 2) - (len / 4) + 1) + (len / 4);
 	printf("citizen_number : %d\n", citizen_number);
 	for (int i = 0; i < citizen_number; i++) {
@@ -339,7 +349,7 @@ int citize_place(int len) { // 3-3 시민 숫자, 배치
 	return citizen_number;
 }
 
-void citize_array(int citizen_number) {//3-3정렬
+void citize_array(int citizen_number) {//3-3,3-4 정렬
 	for (int i = 0; i < citizen_number - 1; i++) {
 		for (int j = 0; j < citizen_number - 1; j++) {
 			if (citizen_num[j] > citizen_num[j + 1]) {
@@ -351,15 +361,15 @@ void citize_array(int citizen_number) {//3-3정렬
 	}
 }
 
-void citizen_percent_chang(int citizen_number) {// 3-3 시민 저장
+void citizen_percent_chang(int citizen_number) {// 3-3 3-4 시민 저장
 	for (int i = 0; i < citizen_number; i++)
 		citizen_num1[i] = citizen_num[i];
 }
-void citizen_num_aggro_chang(int citizen_number) { // 3-3 시민 어그로 저장
+void citizen_num_aggro_chang(int citizen_number) { // 3-3 3-4 시민 어그로 저장
 	for (int i = 0; i < citizen_number; i++)
 		citizen_num_aggro1[i] = citizen_num_aggro[i];
 }
-void citizen_percent3(int percent, int citizen_number) {// 3-3 시민들 움직이기 
+void citizen_percent3(int percent, int citizen_number) {// 3-3 3-4 시민들 움직이기 
 	for (int i = 0; i < citizen_number; i++) {
 		if (citizen_num[i] != -1 && citizen_num[i] != 0) {
 			int citizen_percent = rand() % 100;
@@ -373,7 +383,7 @@ void citizen_percent3(int percent, int citizen_number) {// 3-3 시민들 움직이기
 		}
 	}
 }
-void citizen_percent_aggro3(int citizen_number) { // 3-3 시민들 어그로
+void citizen_percent_aggro3(int citizen_number) { // 3-3 3-4 시민들 어그로
 	for (int i = 0; i < citizen_number; i++) {
 		if (citizen_num[i] != citizen_num1[i]) {
 			citizen_num_aggro[i] = citizen_num_aggro[i] + 1;
@@ -381,7 +391,7 @@ void citizen_percent_aggro3(int citizen_number) { // 3-3 시민들 어그로
 		else citizen_num_aggro[i] = citizen_num_aggro[i] - 1;
 	}
 }
-//3-3 좀비
+//3-3, 3-4 좀비
 int zombie_percent3(int turn, int success, int zombie, int Ma, int ma_aggro, int max_number) { // 3-3 좀비 움직이기
 	if (turn % 2 != 0) {
 		if (success == 0) {
@@ -393,6 +403,40 @@ int zombie_percent3(int turn, int success, int zombie, int Ma, int ma_aggro, int
 		}
 	}
 	return zombie;
+}
+int zombie_percent4(int turn, int success, int zombie, int Ma, int ma_aggro, int max_number, int zombie_number, int zombies_turn) { //3-4 좀비
+	if (turn % 2 != 0) {
+		if (success == 0) {
+			if (citizen_num[max_number] != zombie - 1) {
+				if (citizen_num_aggro[max_number] >= ma_aggro) {
+					if (zombie_num[0] + 1 != zombie)
+						zombie--;
+				}
+				else if (Ma != zombie + 1) zombie++;
+			}
+		}
+	}
+	for (int i = 0; i <= zombie_number; i++) {
+		if (zombie_num[i] != 0 && zombies_turn != 1) {// 바뀐 좀비
+			if (citizen_num[max_number] + 1 != zombie_num[zombie_number]) {
+				if (citizen_num_aggro[max_number] >= ma_aggro) {
+					zombie_num[i] = zombie_num[i] - 1;
+					if (i != 0) {
+						if (zombie_num[i - 1] == zombie_num[i])
+							zombie_num[i] = zombie_num[i] + 1;
+					}
+				}
+				else if (Ma != zombie_num[i] + 1)
+					zombie_num[i] = zombie_num[i] + 1;
+			}
+		}
+	}
+	return zombie;
+}
+
+void zombie_percent_chang(int zombie_number) {// 3-4 좀비 저장
+	for (int i = 0; i < zombie_number; i++)
+		zombie_num1[i] = zombie_num[i];
 }
 
 
@@ -425,7 +469,7 @@ void citizen_write(int citizen, int citizen_chang, int citizen_aggro, int citize
 	else printf("(aggro:%d->%d)\n", citizen_aggro_chang, citizen_aggro); //aggro가 전 다를때
 }
 
-void citizens_write(int citizen_number) { //3-3 시민들
+void citizens_write(int citizen_number) { //3-3 3-4 스테이지 / 시민
 	for (int i = 0; i < citizen_number; i++) {
 		if (citizen_num[i] != -1 && citizen_num[i] != 0) {
 			if (citizen_num[i] == citizen_num1[i])
@@ -455,6 +499,16 @@ void zombie_write(int turn, int zombie, int zombie_chang, int success) { //좀비 
 		else  printf("zombie: %d -> %d\n\n", zombie_chang, zombie); // 좀비 움직일때
 	}
 	else printf("zombie: stay %d(cannot move)\n\n", zombie);
+}
+void zombies_write(int zombie_number) { //3-4 스테이지 / 좀비
+	for (int i = 0; i <= zombie_number; i++) {
+		if (zombie_num[i] != 0) {
+			if (zombie_num[i] == zombie_num1[i])
+				printf("zombie%d: stay %d\n", i, zombie_num[i]);
+			else  printf("zombie%d: %d -> %d\n", i, zombie_num1[i], zombie_num[i]); // 좀비 움직일때
+		}
+		else break;
+	}
 }
 
 //최대, 최소값
@@ -496,8 +550,20 @@ void over5(int citizen_number) { // 시민 어그로
 	}
 }
 
+void zero_number() { // 시민 배열 초기화
+	for (int i = 0; i < 100; i++) {
+		citizen_num[i] = 0;
+		citizen_num1[i] = 0;
+		citizen_num_aggro[i] = 0;
+		citizen_num_aggro1[i] = 0;
+	}
+}
+
 int main(void) {
 	srand((unsigned int)time(NULL));
+	printf("\n\n//////////////////////////////////////////\n\n");
+	printf("     start!!!!!!!    \n");
+	printf("\n//////////////////////////////////////////\n\n");
 	//초기화, 초기상태
 	int len = train_lenfth(); //기차길이
 	int stamina = madongseok_stamina(); // 마동석 체력
@@ -848,6 +914,150 @@ int main(void) {
 		}
 		if (dead == 1)
 			break;
+		//3-4. 스테이지4
+		printf("스테이지4: 시민'들'vs 좀비'들'\n\n");
+		zombie = len - 3;
+		Ma = len - 2;
+		ma_aggro = AGGRO_min;
+		dead = 0;
+		turn = 0;
+		success = 0;
+		zero_number();
+		int zombie_number = 0; // 시민 -> 좀비로 바뀐 좀비 넘버
+		int zombies_turn = 0;
+		num = 0;//마지막 시민이 나가기 위한 임의의 값
+		citizen_number = citize_place(len); //시민숫자, 장소 랜덤
+		max_number = citizen_number - 1; //시민 최고값
+		citize_array(citizen_number);
+		while (1) {
+			printf("\n");
+			zombie_chang = zombie;
+			ma_chang = Ma;
+			ma_aggro_chang = ma_aggro;
+			stamina_chang = stamina;
+			citizen_percent_chang(citizen_number); // 이동하기 전 저장
+			turn++;
+			//이동구간
+			citizen_percent3(percent, citizen_number);//시민들 이동
+			citizen_percent_aggro3(citizen_number);//시민들 어그로
+			over5(citizen_number);
+			zombie = zombie_percent4(turn, success, zombie, Ma, ma_aggro, max_number, zombie_number, zombies_turn);//좀비이동
+			line3(len, zombie, Ma, citizen_number); //상태출력
+			//시민들 글씨 출력
+			citizens_write(citizen_number);//시민들 글씨
+			citizen_percent_chang(citizen_number);// 시민 이동하기 전 저장
+			zombie_write(turn, zombie, zombie_chang, success);//좀비 글씨
+			zombies_write(zombie_number);//좀비들 글씨
+			zombie_percent_chang(zombie_number);//좀비 이동하기 전 저장
+			zombies_turn = 0;
+			success = 0;
+			int ma_move = madongseok_move(Ma, zombie); // 마동석 이동(입력)
+			printf("\n");
+			ma_aggro = madongseok(Ma, ma_move, zombie, ma_aggro); // 마동석 어그로
+			ma_aggro = over2(ma_aggro);
+			Ma = Madongseok(Ma, ma_move); // 마동석 이동
+			line3(len, zombie, Ma, citizen_number); // 상태출력
+			ma_write(ma_chang, Ma, ma_aggro, ma_aggro_chang, stamina); // 마동석 움직이는 글씨
+			stamina_chang = stamina;
+			ma_aggro_chang = ma_aggro;
+			if (citizen_num[max_number] == 1) { // 맨 왼쪽에 도착 할 경우 시민 이김
+				printf("YOU WIN!\n");
+				printf("***************************\n");
+				printf("***************************\n\n\n");
+				break;
+			}
+			int zombie_number_minus = zombie_number - 1; // 좀비 넘버가 -1 일 경우 0으로 바꿈
+			if (zombie_number_minus == 0)
+				zombie_number_minus = 0;
+			//좀비가 옆에 있을때
+			if (Ma - 1 == zombie) {// 시민 어그로 vs 마동석 어그로가 같을때
+				if (citizen_num[max_number] + 1 == zombie_num[zombie_number] || citizen_num[max_number] + 1 == zombie) {
+					if (citizen_num_aggro[max_number] <= ma_aggro) {
+						stamina--;
+						stamina = over(stamina);
+						if (stamina == STM_MIN) // 마동석의 체력이 min이면 끝
+						{
+							printf("\n GAME OVER madongseok dead... \n");
+							dead = 1;
+							break;
+						}
+						printf("Zomibe attacked madongseok(aggro: %d vs. %d, madongseok stamina: %d -> %d)\n", citizen_num_aggro[max_number], ma_aggro, stamina_chang, stamina);
+						stamina_chang = stamina;
+					}
+					else {
+						zombie_num[zombie_number] = citizen_num[max_number];
+						citizen_num[max_number] = -1;
+						printf("citizen%d turned into a zombie\n %d citizen(s) alive(s)", max_number, max_number);
+						zombie_number++;
+						max_number--;
+						if (citizen_num[max_number] == 0) {
+							printf("\n GAME OVER citizens dead... \n");
+							dead = 1; break;
+						}
+						zombies_turn = 1;
+					}
+
+
+				}
+			}
+			else if (Ma - 1 == zombie) { // 마동석과 붙어 있을때
+				stamina--;
+				stamina = over(stamina);
+				if (stamina == STM_MIN) {
+					printf("\n GAME OVER madongseok dead... \n"); dead = 1; break;
+				}
+				printf("Zomibe attacked madongseok(madongseok stamina: %d -> %d)\n", stamina_chang, stamina);
+				stamina_chang = stamina;
+			}
+			else if (citizen_num[max_number] + 1 == zombie || citizen_num[max_number] + 1 == zombie_num[zombie_number_minus]) { // 시민과 붙어 있을때
+				zombie_num[zombie_number] = citizen_num[max_number];
+				citizen_num[max_number] = -1;
+				printf("citizen%d turned into a zombie\n %d citizen(s) alive(s)", max_number, max_number);
+				max_number--;
+				zombie_number++;
+				if (citizen_num[max_number] == 0) {
+					printf("\n GAME OVER citizens dead... \n");
+					dead = 1; break;
+				}
+				zombies_turn = 1;
+			}
+			else printf("citizen does nothing. \n zombie attacked nobody.\n"); // 아무도 안붙어 있을때
+			//마동석 행동 규칙
+			int action = action_ma(Ma, zombie);
+			if (action == ACTION_REST) { //휴식
+				ma_aggro--;
+				stamina++;
+				stamina = over(stamina);
+				ma_aggro = over2(ma_aggro);
+				printf("madongsrok rests...\n");
+				ma_aggro_write(ma_aggro_chang, ma_aggro, stamina_chang, stamina, Ma);
+			}
+			else if (action == ACTION_PROVOKE) { //도발
+				ma_aggro = AGGRO_max;
+				printf("madongsrok provoked zombie...\n");
+				ma_aggro_write(ma_aggro_chang, ma_aggro, stamina_chang, stamina, Ma);
+			}
+			else if (action == ACTION_PULL) { //붙들기
+				ma_aggro = ma_aggro + 2;
+				stamina--;
+				stamina = over(stamina);
+				ma_aggro = over2(ma_aggro);
+				success = Ma_percent1(percent);
+				printf("%d", success);
+				ma_aggro_write(ma_aggro_chang, ma_aggro, stamina_chang, stamina, Ma);
+			}
+			citizen_num_aggro_chang(citizen_number); // 어그로 저장
+			zombie_percent_chang(zombie_number);// 좀비들 위치 저장
+			if (citizen_num[num] == 1) {
+				citizen_num[num] = 0;
+				num++;
+			}
+			printf("===========================\n\n");
+		}
+		printf("\n\n//////////////////////////////////////////\n\n");
+		printf("     Congratulate You win    \n");
+		printf("\n//////////////////////////////////////////\n\n");
+		break;
 	}
 	return 0;
 }
